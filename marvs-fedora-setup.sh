@@ -159,10 +159,10 @@ software_setup() {
 
 # ---Cleanup---
 cleanup() {
-    systemctl disable "$(basename $SERVICE_FILE)"
+    systemctl disable "$(basename "$SERVICE_FILE")"
+    rm -f "$SERVICE_FILE"
 
-    rm -f $SERVICE_FILE
-    rm -rf $(dirname $STATE_FILE)
+    rm -rf "$BASE_PATH"
 
     dnf clean all
     dnf autoremove -y
@@ -171,7 +171,7 @@ cleanup() {
 # ---Script setup---
 sudo -s
 
-mkdir -p "$(dirname $STATE_FILE)"
+mkdir -p "$BASE_PATH"
 
 # ---State Machine---
 stage="$(cat "$STATE_FILE" 2> /dev/null || next_state "$START" && echo "$START")"
@@ -179,7 +179,7 @@ case "$stage" in
     "$START")
 	read -p 'Input hostname (Skip with <ENTER>): ' host
 	if [ -n host ]; then
-	    hostnamectl set-hostname $host
+	    hostnamectl set-hostname "$host"
 	fi
 
 	echo
@@ -192,13 +192,13 @@ case "$stage" in
 	do
             case "$gpu" in
                 '1')
-                    echo "$AMD" > $GPU_FILE
+                    echo "$AMD" > "$GPU_FILE"
                     ;;
 		'2')
-		    echo "$INTEL" > $GPU_FILE
+		    echo "$INTEL" > "$GPU_FILE"
 		    ;;
 		'0')
-		    echo "$SKIP" > $GPU_FILE
+		    echo "$SKIP" > "$GPU_FILE"
 		    ;;
                 *)
                     echo "Invalid GPU: $gpu"
