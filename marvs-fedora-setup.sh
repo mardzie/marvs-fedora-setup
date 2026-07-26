@@ -154,7 +154,7 @@ software_setup() {
 
     flatpak install -y flathub com.obsproject.Studio org.prismlauncher.PrismLauncher com.spotify.Client
 
-    cargo install concord atac
+    cargo install ratty concord atac
 }
 
 # ---Cleanup---
